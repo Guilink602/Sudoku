@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import com.example.sudoku.game.Cell
+import com.example.sudoku.game.Grid
 
 class SudokuGridView(context:Context, attributeSet:AttributeSet) :View(context,attributeSet) {
 
@@ -18,8 +19,8 @@ class SudokuGridView(context:Context, attributeSet:AttributeSet) :View(context,a
     private var selectedRow = -1
     private var selectedCol = -1
 
-    var cells: List<Cell>? = null
-
+   // var cells: List<Cell>? = null
+    var grid:Grid?=null
 
     private var listener: SudokuGridView.OnTouchListener? = null
 
@@ -93,7 +94,7 @@ class SudokuGridView(context:Context, attributeSet:AttributeSet) :View(context,a
 
     private fun fillCells(canvas: Canvas) {
 
-        cells?.forEach {
+        grid?.cells?.forEach {
 
                 val r = it.row
                 val c = it.col
@@ -132,7 +133,7 @@ class SudokuGridView(context:Context, attributeSet:AttributeSet) :View(context,a
         }
     }
     private fun drawText(canvas:Canvas){
-        cells?.forEach {
+        grid?.cells?.forEach {
             val textBound=Rect()
 
 
@@ -166,7 +167,7 @@ class SudokuGridView(context:Context, attributeSet:AttributeSet) :View(context,a
     }
 
     private fun drawNotes(canvas:Canvas){
-        cells?.forEach {
+        grid?.cells?.forEach {
             val valueString=it.value.toString()
             val textBound=Rect()
             val paint=if(it.isStartingCell) startCellTextPaint else TextPaint
@@ -210,8 +211,8 @@ class SudokuGridView(context:Context, attributeSet:AttributeSet) :View(context,a
         invalidate()
     }
 
-    fun updateCell(cells:List<Cell>){
-        this.cells=cells
+    fun updateCell(grid:Grid?){
+        this.grid=grid
         invalidate()
     }
 

@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.sudoku.databinding.ActivityMainBinding
 import com.example.sudoku.game.Cell
+import com.example.sudoku.game.Grid
 import com.example.sudoku.view.SudokuGridView
 import com.example.sudoku.viewModel.SudokuViewModel
 
@@ -26,15 +27,15 @@ class MainActivity : AppCompatActivity(),SudokuGridView.OnTouchListener{
 
         viewModel= ViewModelProvider(this).get(SudokuViewModel::class.java)
         viewModel.sudokuGame.selectedCellLiveData.observe(this, Observer { updateSelectedCell(it) })
-        viewModel.sudokuGame.cellsLiveData.observe(this,Observer{updateCell(it)})
+        viewModel.sudokuGame.gridLiveData.observe(this,Observer{updateCell(it)})
         val buttons= listOf(binding.OneButton,binding.TwoButton,binding.ThreeButton,binding.FourButton,binding.FiveButton,binding.SixButton,binding.SevenButton,binding.EightButton,binding.NineButton)
 
         buttons.forEachIndexed{index,button->button.setOnClickListener{viewModel.sudokuGame.handleInput(index+1,binding.NoteSwitch.isChecked)}}
         binding.Delete.setOnClickListener{viewModel.sudokuGame.delete(binding.NoteSwitch.isChecked)}
     }
 
-    private fun updateCell(cells:List<Cell>?)=cells?.let{
-        binding.Board.updateCell(cells)
+    private fun updateCell(grid:Grid?)=grid?.let{
+        binding.Board.updateCell(grid)
     }
 
 
