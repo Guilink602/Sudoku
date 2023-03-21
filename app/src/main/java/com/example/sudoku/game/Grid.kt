@@ -1,5 +1,7 @@
 package com.example.sudoku.game
 
+import kotlin.random.Random
+
 class Grid(val size:Int) {
 
     var cells :List<Cell> = emptyList()
@@ -8,8 +10,10 @@ class Grid(val size:Int) {
     var path:ArrayList<Pair<Int,Pair<Int,Int>>> = ArrayList()
 
     fun generateGrid(){
-        cells=List(9*9){i->Cell(i/9,i%9,  0, false,mutableSetOf<Int>(),i)}
+        TODO("Optimisation of the generation of grid because it is a bit slow")
+        cells=List(9*9){i->Cell(i/9,i%9,  0, false,mutableSetOf<Int>())}
         generateCompleteSoluce()
+        removeCell()
     }
 
     fun getCells(row:Int,col:Int)= cells[row*9+col]
@@ -23,58 +27,28 @@ class Grid(val size:Int) {
             isValid=true
         }
         else {
-            EndSearch@ for (r in 0 until size) {
+             for (r in 0 until size) {
                 for (c in 0 until size) {
                     if (getCells(r, c).value == 0) {
                         availableInt.shuffle()
                         for (i: Int in availableInt) {
                             if (validatePosition(r, c, i)) {
-                                getCells(r, c).value = i
+                                getCells(r, c).setCellDefaultInfo(i)
                                 //No empty cell
 
                                     if (generateCompleteSoluce())
                                         return true
                                 }
                             }
-                        getCells(r, c).value = 0
+                        getCells(r, c).setCellDefaultInfo(0)
                         return false
                         }
 
                     }
                 }
             }
-
         return isValid
 
-        /*
-        for(r in 0 until size)
-        {
-            for(c in 0 until size)
-            {
-                 if(getCells(r,c).value==0){
-                    availableInt.shuffle()
-                    for(i:Int in availableInt){
-                        if(validatePosition(r,c,i))
-                        {
-                            getCells(r,c).value=i
-                            //No empty cell
-                            if(gridNotEmpty())
-                                return true
-                            else{
-                                if(generateCompleteSoluce())
-                                    return true
-                                else{
-                                    getCells(r,c).value=0
-                                    return false
-                                }
-                            }
-                        }
-                    }
-                 }
-
-            }
-        }*/
-    return false
     }
 
     fun validatePosition(row:Int,col: Int,value:Int):Boolean {
@@ -96,37 +70,6 @@ class Grid(val size:Int) {
         return true
     }
 
-    fun validateColPosition(row:Int,col: Int,value:Int):Boolean{
-        for(r in 0 until 9)
-        {
-            if(r!=row)
-            {
-                if(getCells(r,col).value==value)
-                    return false
-            }
-        }
-        return true
-    }
-
-    fun validateRowPosition(row:Int,col: Int,value:Int):Boolean{
-        for(c in 0 until 9)
-        {
-            if(c!=col)
-            {
-                if(getCells(row,c).value==value)
-                    return false
-            }
-        }
-        return true
-    }
-
-    fun validateCasePosition(row:Int,col: Int,value:Int):Boolean{
-
-
-        return  true
-    }
-
-
     fun gridNotEmpty():Boolean{
         cells.forEach {
             if(it.value==0)
@@ -134,4 +77,100 @@ class Grid(val size:Int) {
         }
         return true
     }
+
+    fun countNotEmptyCell():Int{
+        var nbCellNotEmpty=0;
+        cells.forEach {
+            if(it.value!=0)
+                nbCellNotEmpty++
+        }
+        return nbCellNotEmpty
+    }
+
+    fun removeCell(){
+        var nbFilledCell=countNotEmptyCell()
+        var rounds=3
+        while(rounds>0&&nbFilledCell>=17){
+            //getRandomCell
+
+            var cellToEmpty:Cell?=null
+            var isNotEmptyCell=false
+            while(!isNotEmptyCell){
+
+                cellToEmpty=cells.get(Random.nextInt(0,81))
+                if(cellToEmpty.value!=0)
+                    isNotEmptyCell=true
+            }
+            cellToEmpty?.setNotStartingCell(0,false)
+            nbFilledCell--
+            var lstCopyGrid=Array(9*9){i->cells[i].value}
+          var nbSoluce= solveGrid(lstCopyGrid)
+
+            if(nbSoluce!=1){
+                cellToEmpty?.setCellDefaultInfo(cellToEmpty.getCorrectValue())
+                nbFilledCell++;
+                rounds--
+            }
+        }
+    }
+
+    fun solveGrid(lstCopyGrid:Array<Int>):Int {
+        var nbSoluce = 0
+        if (falseGridNotEmpty(lstCopyGrid)) {
+            return 1
+        } else {
+            //For lstGridUntil Empty
+            var indexEmptyCell = getIndexEmptyCell(lstCopyGrid)
+            val row: Int = indexEmptyCell / size
+            val col: Int = indexEmptyCell % size
+            for (i in 1 until 10) {
+                //isValidPlace
+                if(validateFalsePosition(lstCopyGrid,row,col,i))
+                {
+                    lstCopyGrid[indexEmptyCell]=i
+                    nbSoluce+=solveGrid(lstCopyGrid)
+                    lstCopyGrid[indexEmptyCell]=0
+                }
+            }
+        }
+        return nbSoluce
+    }
+
+    fun getIndexEmptyCell(lstCopyGrid: Array<Int>):Int{
+        var foundEmpty=false
+        var cpt=0
+        while (!foundEmpty&&cpt<lstCopyGrid.size)
+        {
+            if(lstCopyGrid[cpt]==0)
+                return cpt
+            cpt++
+        }
+        return 80;
+    }
+
+    fun falseGridNotEmpty(lstCopyGrid:Array<Int>):Boolean{
+        lstCopyGrid.forEach {
+            if(it==0)
+                return false
+        }
+        return true
+    }
+
+    fun validateFalsePosition(lstCopyGrid:Array<Int>,row:Int,col:Int,value:Int):Boolean {
+        for (r in 0 until 9) {
+            for (c in 0 until 9) {
+                if (r == row || c == col) {
+                    if (lstCopyGrid[r*size+c] == value)
+                        return false
+                } else if (r / 3 == row / 3 && c / 3 == col / 3) {
+                    if (lstCopyGrid[r*size+c] == value)
+                        return false
+                }
+            }
+        }
+        return true
+    }
+
+
+
 }

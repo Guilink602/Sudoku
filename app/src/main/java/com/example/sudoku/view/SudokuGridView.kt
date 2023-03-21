@@ -27,7 +27,7 @@ class SudokuGridView(context:Context, attributeSet:AttributeSet) :View(context,a
     private val thickLinePaint = Paint().apply {
         style = Paint.Style.STROKE
         color = Color.BLACK
-        strokeWidth = 4F
+        strokeWidth = 6F
     }
 
     private val thinLinePaint = Paint().apply {
@@ -56,6 +56,11 @@ class SudokuGridView(context:Context, attributeSet:AttributeSet) :View(context,a
     private val TextPaint = Paint().apply {
         style = Paint.Style.FILL_AND_STROKE
         color = Color.BLACK
+    }
+
+    private val TextPaintGoodAnswer = Paint().apply {
+        style = Paint.Style.FILL_AND_STROKE
+        color = Color.BLUE
     }
 
     private val noteTextPaint = Paint().apply {
@@ -156,12 +161,16 @@ class SudokuGridView(context:Context, attributeSet:AttributeSet) :View(context,a
             } else {
                 val valueString=it.value.toString()
                 val paint=if(it.isStartingCell) startCellTextPaint else TextPaint
-                TextPaint.getTextBounds(valueString,0,valueString.length,textBound)
-                val textWidth=TextPaint.measureText(valueString)
+                paint.getTextBounds(valueString,0,valueString.length,textBound)
+                val textWidth=paint.measureText(valueString)
                 val textHeight=textBound.height()
-
+                //ONLY FOR DEBUG
+                if(it.value==it.getCorrectValue())
+                {
+                    paint.color=Color.BLUE
+                }
                 canvas.drawText(valueString,(it.col*cellSize)+cellSize/2-textWidth/2,
-                (it.row*cellSize)+cellSize/2F+textHeight/2F,TextPaint)
+                (it.row*cellSize)+cellSize/2F+textHeight/2F,paint)
             }
         }
     }

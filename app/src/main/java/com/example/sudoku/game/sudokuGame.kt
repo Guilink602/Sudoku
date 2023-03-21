@@ -4,28 +4,24 @@ import androidx.lifecycle.MutableLiveData
 
 class sudokuGame {
     var selectedCellLiveData=MutableLiveData<Pair<Int,Int>>()
-    //var cellsLiveData=MutableLiveData<List<Cell>>()
+
     var gridLiveData=MutableLiveData<Grid>()
     private  var selectedRow=-1
     private var selectedCol=-1
 
-    //var cells :List<Cell> = emptyList()
+    //TO SAVE
     var grid=Grid(9)
 
+    // TO SAVE
     var nbMistake=0
 
-    init {
+    //Timer TO SAVE we have to make play
 
-        //val cellsTemp=List(9*9){i->Cell(i/9,i%9,  (i%9)+1, false,mutableSetOf<Int>(),i)}
-       // grid.cells=cellsTemp
-       // grid.cells[0].value=0
-       // grid.cells[0].notes= mutableSetOf(1,2,3,4,5,6,7,8,9)
-       // grid.cells[11].isStartingCell=true
-       // grid.cells[21].isStartingCell=true
-      //  selectedCellLiveData.postValue(Pair(selectedRow,selectedCol))
+    init {
+        TODO("We have to save previous game see parameters above and only generate game if necessary")
+
         grid.generateGrid()
         gridLiveData.postValue(grid)
-      //  cellsLiveData.postValue(grid.cells)
     }
 
     fun handleInput(number:Int,isTakingNotes:Boolean) {
@@ -40,16 +36,18 @@ class sudokuGame {
                 cell.notes.add(number)
         } else {
             cell.value = number
+            if(!cell.isGoodValue())
+                nbMistake++;
         }
         gridLiveData.postValue(grid)
      //   cellsLiveData.postValue(grid.cells)
     }
 
     fun updateCell(row:Int,col:Int){
-        if(!grid.getCells(row,col).isStartingCell){
+        //if(!grid.getCells(row,col).isStartingCell){
         selectedRow=row
         selectedCol=col
-        selectedCellLiveData.postValue(Pair(row,col))}
+        selectedCellLiveData.postValue(Pair(row,col))//}
     }
 
 
