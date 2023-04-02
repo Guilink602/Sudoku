@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import com.example.sudoku.game.Cell
+import com.example.sudoku.game.Grid
 
 class SudokuGridView(context:Context, attributeSet:AttributeSet) :View(context,attributeSet) {
 
@@ -18,15 +19,15 @@ class SudokuGridView(context:Context, attributeSet:AttributeSet) :View(context,a
     private var selectedRow = -1
     private var selectedCol = -1
 
-    var cells: List<Cell>? = null
-
+   // var cells: List<Cell>? = null
+    var grid:Grid?=null
 
     private var listener: SudokuGridView.OnTouchListener? = null
 
     private val thickLinePaint = Paint().apply {
         style = Paint.Style.STROKE
         color = Color.BLACK
-        strokeWidth = 4F
+        strokeWidth = 6F
     }
 
     private val thinLinePaint = Paint().apply {
@@ -55,6 +56,11 @@ class SudokuGridView(context:Context, attributeSet:AttributeSet) :View(context,a
     private val TextPaint = Paint().apply {
         style = Paint.Style.FILL_AND_STROKE
         color = Color.BLACK
+    }
+
+    private val TextPaintGoodAnswer = Paint().apply {
+        style = Paint.Style.FILL_AND_STROKE
+        color = Color.BLUE
     }
 
     private val noteTextPaint = Paint().apply {
@@ -93,7 +99,7 @@ class SudokuGridView(context:Context, attributeSet:AttributeSet) :View(context,a
 
     private fun fillCells(canvas: Canvas) {
 
-        cells?.forEach {
+        grid?.cells?.forEach {
 
                 val r = it.row
                 val c = it.col
@@ -132,7 +138,7 @@ class SudokuGridView(context:Context, attributeSet:AttributeSet) :View(context,a
         }
     }
     private fun drawText(canvas:Canvas){
-        cells?.forEach {
+        grid?.cells?.forEach {
             val textBound=Rect()
 
 
@@ -155,18 +161,22 @@ class SudokuGridView(context:Context, attributeSet:AttributeSet) :View(context,a
             } else {
                 val valueString=it.value.toString()
                 val paint=if(it.isStartingCell) startCellTextPaint else TextPaint
-                TextPaint.getTextBounds(valueString,0,valueString.length,textBound)
-                val textWidth=TextPaint.measureText(valueString)
+                paint.getTextBounds(valueString,0,valueString.length,textBound)
+                val textWidth=paint.measureText(valueString)
                 val textHeight=textBound.height()
-
+                //ONLY FOR DEBUG
+                if(it.value==it.getCorrectValue())
+                {
+                    paint.color=Color.BLUE
+                }
                 canvas.drawText(valueString,(it.col*cellSize)+cellSize/2-textWidth/2,
-                (it.row*cellSize)+cellSize/2F+textHeight/2F,TextPaint)
+                (it.row*cellSize)+cellSize/2F+textHeight/2F,paint)
             }
         }
     }
 
     private fun drawNotes(canvas:Canvas){
-        cells?.forEach {
+        grid?.cells?.forEach {
             val valueString=it.value.toString()
             val textBound=Rect()
             val paint=if(it.isStartingCell) startCellTextPaint else TextPaint
@@ -210,8 +220,8 @@ class SudokuGridView(context:Context, attributeSet:AttributeSet) :View(context,a
         invalidate()
     }
 
-    fun updateCell(cells:List<Cell>){
-        this.cells=cells
+    fun updateCell(grid:Grid?){
+        this.grid=grid
         invalidate()
     }
 
