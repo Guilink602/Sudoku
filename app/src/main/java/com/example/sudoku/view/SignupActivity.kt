@@ -30,7 +30,6 @@ class SignupActivity  : AppCompatActivity() {
         binding.button.setOnClickListener {
             val nom =binding.nom.text.toString()
             val prenom = binding.prenom.text.toString()
-            val age= binding.age.text.toString().toInt()
             val email = binding.emailEt.text.toString()
             val nomdutilisateur=binding.nomdutilisateur.text.toString()
             val pass = binding.passET.text.toString()
@@ -43,11 +42,10 @@ class SignupActivity  : AppCompatActivity() {
                     firebaseAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener {
                         if (it.isSuccessful) {
                             database=FirebaseDatabase.getInstance().getReference("Users").child(firebaseAuth.currentUser!!.uid)
-                            val user= User(nom,prenom,age,0,nomdutilisateur, firebaseAuth.currentUser!!.uid)
-                            database.child(nom).setValue(user).addOnSuccessListener {
+                            val user= User(nom,prenom,0,nomdutilisateur, firebaseAuth.currentUser!!.uid)
+                            database.setValue(user).addOnSuccessListener {
                                 binding.nom.text.clear()
                                 binding.prenom.text.clear()
-                                binding.age.text.clear()
                                 binding.nomdutilisateur.text.clear()
 
                                 val intent = Intent(this, LoginActivity::class.java)

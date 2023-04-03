@@ -14,13 +14,17 @@ import com.google.firebase.database.ValueEventListener
 
 class ProfileActivity: AppCompatActivity() {
     private lateinit var nom: TextView
-    private lateinit var age: TextView
+    private lateinit var prenom: TextView
     private lateinit var nomdutilisateur: TextView
     private lateinit var score: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
+        nom = findViewById(R.id.nom)
+        prenom = findViewById(R.id.prenom)
+        nomdutilisateur = findViewById(R.id.nomdutilisateur)
+        score = findViewById(R.id.score)
 
         val currentUser = FirebaseAuth.getInstance().currentUser
         if (currentUser == null) {
@@ -35,13 +39,13 @@ class ProfileActivity: AppCompatActivity() {
             userRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val Nom = dataSnapshot.child("nom").getValue(String::class.java)
-                    val Age = dataSnapshot.child("age").getValue(Int::class.java)
+                    val Prenom = dataSnapshot.child("prenom").getValue(String::class.java)
                     val Score = dataSnapshot.child("score").getValue(Int::class.java)
                     val Nomdutilisateur =
                         dataSnapshot.child("nomdutilisateur").getValue(String::class.java)
                     nom.text = Nom
+                    prenom.text=Prenom
                     nomdutilisateur.text = Nomdutilisateur
-                    age.text = Age.toString()
                     score.text = Score.toString()
 
                 }

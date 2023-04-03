@@ -29,7 +29,10 @@
             android:name=".view.SignupActivity"
             android:exported="false">
         </activity>
-
+        <activity
+            android:name=".view.ProfileActivity"
+            android:exported="false">
+        </activity>
     </application>
 
 </manifest>

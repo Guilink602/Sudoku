@@ -50,18 +50,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nom" />
         <EditText
-            android:id="@+id/age"
-            android:layout_width="360dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="32dp"
-            android:hint="Entrer Votre Age"
-            android:paddingLeft="20dp"
-            android:inputType="number"
-            android:maxLength="2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/prenom" />
-        <EditText
             android:id="@+id/emailEt"
             android:layout_width="360dp"
             android:layout_height="50dp"
@@ -71,7 +59,7 @@
             android:paddingLeft="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/age" />
+            app:layout_constraintTop_toBottomOf="@+id/prenom" />
         <EditText
             android:id="@+id/nomdutilisateur"
             android:layout_width="360dp"
@@ -111,8 +99,8 @@
             android:layout_height="70dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="632dp"
-            android:backgroundTint="@color/teal_200"
-            android:text="Login"
+            android:backgroundTint="@color/purple_500"
+            android:text="S'inscrire"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -120,8 +108,9 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:textColor="@color/purple_500"
             android:text="Deja membre , Se connecter  !"
+            android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
