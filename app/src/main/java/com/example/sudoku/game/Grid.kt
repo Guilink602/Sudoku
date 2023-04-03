@@ -10,8 +10,7 @@ class Grid(val size:Int) {
     var path:ArrayList<Pair<Int,Pair<Int,Int>>> = ArrayList()
 
     fun generateGrid(){
-        TODO("Optimisation of the generation of grid because it is a bit slow")
-        cells=List(9*9){i->Cell(i/9,i%9,  0, false,mutableSetOf<Int>())}
+         cells=List(9*9){i->Cell(i/9,i%9,  0, false,mutableSetOf<Int>())}
         generateCompleteSoluce()
         removeCell()
     }

@@ -9,6 +9,7 @@ import com.example.sudoku.game.Cell
 import com.example.sudoku.game.Grid
 import com.example.sudoku.view.SudokuGridView
 import com.example.sudoku.viewModel.SudokuViewModel
+import com.google.firebase.FirebaseApp
 
 class MainActivity : AppCompatActivity(),SudokuGridView.OnTouchListener{
 
@@ -18,6 +19,8 @@ class MainActivity : AppCompatActivity(),SudokuGridView.OnTouchListener{
   //  private  val buttons= listOf(binding.OneButton,binding.TwoButton,binding.ThreeButton,binding.FourButton,binding.FiveButton,binding.SixButton,binding.SevenButton,binding.EightButton,binding.NineButton)
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        FirebaseApp.initializeApp(this)
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

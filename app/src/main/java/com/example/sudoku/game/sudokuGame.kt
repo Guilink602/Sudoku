@@ -18,8 +18,6 @@ class sudokuGame {
     //Timer TO SAVE we have to make play
 
     init {
-        TODO("We have to save previous game see parameters above and only generate game if necessary")
-
         grid.generateGrid()
         gridLiveData.postValue(grid)
     }
