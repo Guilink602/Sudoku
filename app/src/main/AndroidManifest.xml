@@ -11,7 +11,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Sudoku"
         tools:targetApi="31">
-
         <activity
             android:name=".view.LoginActivity"
             android:exported="true">
@@ -29,7 +28,18 @@
             android:name=".view.SignupActivity"
             android:exported="false">
         </activity>
-
+        <activity
+            android:name=".view.LeaderboardActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".view.ProfileActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".view.MenuActivity"
+            android:exported="false">
+        </activity>
     </application>
 
 </manifest>
