@@ -33,7 +33,13 @@ class LeaderboardActivity : AppCompatActivity() {
 
         val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, getAllData)
         listLeaderboard.adapter = arrayAdapter
-        binding.BackButton.setOnClickListener { v: View? -> super.finish() }
+        binding.BackButton.setOnClickListener {
+            super.finish()
+        }
+
+        binding.OnlineButton.setOnClickListener{
+            //online leaderboards
+        }
 
     }
 
