@@ -1,9 +1,7 @@
 package com.example.sudoku.view
 
 import android.os.Bundle
-import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Button
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.sudoku.R
