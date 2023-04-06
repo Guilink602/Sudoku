@@ -42,13 +42,13 @@ class Database(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         values.put(COL_1, name)
         values.put(COL_2, time)
         values.put(COL_3, errors)
-        db.update(TABLE_NAME, values, "ID = ?", arrayOf(name))
+        db.update(TABLE_NAME, values, "NAME = ?", arrayOf(name))
         return true
     }
 
     fun deleteFromTable(name : String) {
         val db = this.writableDatabase
-        db.delete(TABLE_NAME, "ID = ?", arrayOf(name))
+        db.delete(TABLE_NAME, "NAME = ?", arrayOf(name))
     }
 
     companion object{
