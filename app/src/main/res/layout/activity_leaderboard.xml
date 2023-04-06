@@ -20,6 +20,14 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:text="Back" />
+        
+        <Button
+            android:id="@+id/OnlineButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:text="Online Leaderboards" />
 
         <TextView
             android:id="@+id/TextViewLeaderboard"
