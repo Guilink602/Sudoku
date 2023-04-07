@@ -3,27 +3,31 @@ package com.example.sudoku.view
 import android.content.ComponentName
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
-import android.widget.EditText
-import android.widget.LinearLayout
+import android.widget.SearchView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.sudoku.R
+import com.example.sudoku.viewModel.MyAdapter
 import com.example.sudoku.viewModel.User
+import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
+
 class ProfileActivity: AppCompatActivity() {
     private lateinit var nom: TextView
     private lateinit var nomdutilisateur: TextView
     private lateinit var score: TextView
+    var recview: RecyclerView? = null
+    var adapter: MyAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -33,7 +37,7 @@ class ProfileActivity: AppCompatActivity() {
         nomdutilisateur = findViewById(R.id.nomdutilisateur)
         score = findViewById(R.id.score)
         val shareButton = findViewById<Button>(R.id.partage)
-        val search = findViewById<EditText>(R.id.search)
+
 
 
         val currentUser = FirebaseAuth.getInstance().currentUser
@@ -91,53 +95,79 @@ class ProfileActivity: AppCompatActivity() {
                 )
             })
         }
-/*
-search.addTextChangedListener(object : TextWatcher {
-    override fun afterTextChanged(s: Editable?) {
-        val searchQuery = s.toString()
-        searchUsers(searchQuery)
-    }
+        recview = findViewById(R.id.recview)
+        recview?.setLayoutManager(LinearLayoutManager(this))
 
-    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        val options: FirebaseRecyclerOptions<User> = FirebaseRecyclerOptions.Builder<User>()
 
-    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-})
-}
-private fun searchUsers(query: String) {
-val userRef = FirebaseDatabase.getInstance().getReference("Users")
-val queryRef = userRef.orderByChild("uid").startAt(query).endAt(query + "\uf8ff")
-queryRef.addValueEventListener(object : ValueEventListener {
-    override fun onDataChange(snapshot: DataSnapshot) {
-        val usersLayout = findViewById<LinearLayout>(R.id.user_search)
+            .setQuery(FirebaseDatabase.getInstance().reference.child("Users"), User::class.java)
+            .build()
 
-        usersLayout.removeAllViews()
+        adapter = MyAdapter(options)
+        (recview as? RecyclerView)?.setAdapter(adapter)
 
-        // Boucler sur les résultats et les ajouter à l'affichage
-        for (userSnapshot in snapshot.children) {
-            val user = userSnapshot.getValue(User::class.java)
-            if (user != null) {
-                val userView = LayoutInflater.from(this@ProfileActivity)
-                    .inflate(R.layout.user_view, null, false)
-                userView.findViewById<TextView>(R.id. nomdutilisateur).text =
-                    user.nomdutilisateur
-                userView.setOnClickListener {
-                    openUserProfile(userSnapshot.key!!)
-                }
-                usersLayout.addView(userView)
+    }override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.searchmenu, menu)
+        val searchItem: MenuItem = menu.findItem(R.id.search)
+        val searchView: SearchView = searchItem.actionView as SearchView
+        searchView.queryHint = "Rechercher un utilisateur"
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
             }
-        }
+            override fun onQueryTextChange(newText: String?): Boolean {
+                adapter!!.stopListening()
+                if (newText != null && newText.isNotBlank()) {
+                    val searchQuery = newText.trim()
+                    val query = FirebaseDatabase.getInstance().reference.child("Users")
+                        .orderByChild("nomdutilisateur").startAt(searchQuery).endAt(searchQuery + "\uf8ff")
+                    val options: FirebaseRecyclerOptions<User> = FirebaseRecyclerOptions.Builder<User>()
+                        .setQuery(query, User::class.java)
+                        .build()
+                    adapter = MyAdapter(options)
+                    recview!!.adapter = adapter
+                    adapter!!.startListening()
+                } else {
+                    adapter!!.stopListening()
+                    val options: FirebaseRecyclerOptions<User> = FirebaseRecyclerOptions.Builder<User>()
+                        .setQuery(FirebaseDatabase.getInstance().reference.child("Users"), User::class.java)
+                        .build()
+                    adapter = MyAdapter(options)
+                    recview!!.adapter = adapter
+                    adapter!!.startListening()
+                }
+                return true
+            }
+        })
+
+        val options: FirebaseRecyclerOptions<User> = FirebaseRecyclerOptions.Builder<User>()
+            .setQuery(FirebaseDatabase.getInstance().reference.child("Users").orderByChild("nomdutilisateur").equalTo(""), User::class.java)
+            .build()
+
+        adapter = MyAdapter(options)
+        recview!!.adapter = adapter
+        adapter!!.startListening()
+
+        return true
+    }
+    override fun onStart() {
+        super.onStart()
+        adapter?.startListening()
     }
 
-    override fun onCancelled(error: DatabaseError) {
-
+    override fun onStop() {
+        super.onStop()
+        adapter?.stopListening()
     }
-})
-}
-private fun openUserProfile(userId: String) {
-val intent = Intent(this, ProfileActivity::class.java)
-intent.putExtra("userId", userId)
-startActivity(intent)
-}
-*/
+
+    private fun processSearch(s: String) {
+        val query = FirebaseDatabase.getInstance().reference.child("Users")
+            .orderByChild("nom").startAt(s).endAt(s + "\uf8ff")
+        val options: FirebaseRecyclerOptions<User> = FirebaseRecyclerOptions.Builder<User>()
+            .setQuery(query, User::class.java)
+            .build()
+        adapter = MyAdapter(options)
+        adapter!!.startListening()
+        recview!!.adapter = adapter
     }
 }

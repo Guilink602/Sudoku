@@ -4,24 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.ProfileActivity">
+    tools:context=".view.UserProfileActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:background="@color/purple_500"
-        android:gravity="center"
-        android:orientation="vertical">
+
 
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recview"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:background="@color/purple_500"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <ImageView
             android:layout_width="130dp"
@@ -56,7 +57,7 @@
             android:text="Mon nom"
             android:textSize="20dp"
             android:textColor="@color/purple_500"
-           />
+            />
 
 
 
@@ -67,7 +68,7 @@
         android:layout_marginTop="420dp"
         android:gravity="center_horizontal|center_vertical"
         android:orientation="horizontal"
-       >
+        >
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -102,11 +103,11 @@
         android:gravity="center_horizontal|center_vertical"
         android:orientation="horizontal"
         >
-    <ImageView
-        android:layout_width="30dp"
-        android:layout_height="130dp"
-        android:src="@drawable/baseline_access_time_filled_24"
-        />
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="130dp"
+            android:src="@drawable/baseline_access_time_filled_24"
+            />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -115,37 +116,17 @@
         android:gravity="center_horizontal|center_vertical"
         android:orientation="horizontal"
         >
-    <TextView
-        android:id="@+id/temps"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="2555"
-        android:textColor="@color/purple_500"
-        android:textSize="20dp"
-        android:layout_gravity="bottom|center_horizontal"
-        />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_marginTop="600dp"
-        android:gravity="center_horizontal|center_vertical"
-        android:orientation="horizontal"
-        >
-        <Button
-            android:id="@+id/partage"
+        <TextView
+            android:id="@+id/temps"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Partager ton Score "
-            android:textSize="15sp"
-            android:layout_marginTop="16dp"
-            android:textColor="@android:color/white"
-            android:drawablePadding="8dp"
-            android:paddingStart="24dp"
-            android:paddingEnd="24dp"
-            android:layout_gravity="center_horizontal" />
-
+            android:text="2555"
+            android:textColor="@color/purple_500"
+            android:textSize="20dp"
+            android:layout_gravity="bottom|center_horizontal"
+            />
     </LinearLayout>
+
 
 
 
