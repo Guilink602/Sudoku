@@ -38,6 +38,14 @@
             android:name=".view.ProfileActivity"
             android:exported="false">
         </activity>
+        <activity
+            android:name=".view.MenuActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".view.LeaderboardActivity"
+            android:exported="false">
+        </activity>
     </application>
 
 </manifest>
