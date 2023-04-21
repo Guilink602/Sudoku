@@ -6,7 +6,10 @@ data class User(
     val prenom: String,
     val score: Int?= null,
     val nomdutilisateur: String = "",
-    val uid: String = ""
+    val uid: String = "",
+    var imageUrl:String= " "
 ) {
+
+
     constructor() : this("", "", null, "", "")
 }

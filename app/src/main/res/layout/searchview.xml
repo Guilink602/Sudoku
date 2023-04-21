@@ -7,45 +7,44 @@
     android:elevation="5dp"
     app:cardUseCompatPadding="true">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="15dp">
+        android:orientation="horizontal">
 
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profileImageView"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/profile"
+            android:scaleType="centerCrop"
+            app:civ_border_width="2dp"
+            app:civ_border_color="@color/white" />
 
-
-        <TextView
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/nom"
-            android:text="mon nom"
-            android:textStyle="bold"
-            android:textSize="25sp"
-            android:textColor="#000"
-            android:layout_marginLeft="10dp"/>
+            android:layout_weight="1"
+            android:layout_marginLeft="16dp"
+            android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/nomdutilisateur"
-            android:text="nom d'utilisateur"
-            android:textSize="25sp"
-            android:textColor="#000"
-            android:layout_below="@id/nom"
-            android:layout_marginLeft="10dp"/>
+            <TextView
+                android:id="@+id/nom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nom"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/nomdutilisateur"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nom d'utilisateur"
+                android:textSize="14sp"
+                android:textColor="@color/black" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/score"
-            android:text="score"
-            android:textSize="25sp"
-            android:textColor="#000"
-            android:layout_below="@id/nomdutilisateur"
-            android:layout_marginLeft="10dp"/>
+        </LinearLayout>
 
-
-    </RelativeLayout>
-
+    </LinearLayout>
 </androidx.cardview.widget.CardView>

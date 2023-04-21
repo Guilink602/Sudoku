@@ -15,6 +15,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.database.FirebaseDatabase
 import com.example.sudoku.view.UserProfileActivity
+import com.google.firebase.storage.FirebaseStorage
 
 class MyAdapter(options: FirebaseRecyclerOptions<User>) :
     FirebaseRecyclerAdapter<User, MyAdapter.MyViewHolder>(options) {
@@ -22,7 +23,17 @@ class MyAdapter(options: FirebaseRecyclerOptions<User>) :
     override fun onBindViewHolder(holder: MyViewHolder, position: Int, user: User) {
         holder.nom.text = user.nom
         holder.nomdutilisateur.text = user.nomdutilisateur
-        holder.score.text = user.score.toString()
+        val storageRef = FirebaseStorage.getInstance().getReference().child("users").child(getRef(position).key!!)
+        storageRef.downloadUrl.addOnSuccessListener { uri ->
+            // Charger l'image avec Glide
+            Glide.with(holder.itemView.context)
+                .load(uri)
+                .into(holder.img)
+        }.addOnFailureListener {
+            // Si la récupération de l'URL de l'image échoue, afficher une image par défaut
+            holder.img.setImageResource(R.drawable.baseline_person_2_24)
+        }
+
         holder.itemView.setOnClickListener {
             val intent = Intent(holder.itemView.context, UserProfileActivity::class.java)
             intent.putExtra("userId", getRef(position).key!!)
@@ -43,6 +54,6 @@ class MyAdapter(options: FirebaseRecyclerOptions<User>) :
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var nom: TextView = itemView.findViewById(R.id.nom)
         var nomdutilisateur: TextView = itemView.findViewById(R.id.nomdutilisateur)
-        var score: TextView = itemView.findViewById(R.id.score)
+        var img: ImageView = itemView.findViewById(R.id.profileImageView)
     }
 }

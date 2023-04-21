@@ -1,16 +1,23 @@
 package com.example.sudoku.view
 
+import android.app.Activity
 import android.content.ComponentName
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.provider.MediaStore
+import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.sudoku.R
 import com.example.sudoku.viewModel.MyAdapter
 import com.example.sudoku.viewModel.User
@@ -20,14 +27,22 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
+import java.io.ByteArrayOutputStream
 
 
 class ProfileActivity: AppCompatActivity() {
+    companion object {
+        private const val REQUEST_IMAGE_CAPTURE = 1
+        private const val  REQUEST_IMAGE_PICK =1
+    }
     private lateinit var nom: TextView
     private lateinit var nomdutilisateur: TextView
     private lateinit var score: TextView
+    private lateinit var profileImageView: ImageView
     var recview: RecyclerView? = null
     var adapter: MyAdapter? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -36,6 +51,8 @@ class ProfileActivity: AppCompatActivity() {
         nom = findViewById(R.id.nom)
         nomdutilisateur = findViewById(R.id.nomdutilisateur)
         score = findViewById(R.id.score)
+        profileImageView = findViewById<ImageView>(R.id.profileImageView)
+
         val shareButton = findViewById<Button>(R.id.partage)
 
 
@@ -58,13 +75,16 @@ class ProfileActivity: AppCompatActivity() {
                     val Score = dataSnapshot.child("score").getValue(Int::class.java)
                     val Nomdutilisateur =
                         dataSnapshot.child("nomdutilisateur").getValue(String::class.java)
-                    if (Nom != null&& Score!=null) {
                         nom.text = Nom+" "+Prenom
-
-                    }
                     nomdutilisateur.text=nom.text
                     score.text = Score.toString()
-
+                    val storageRef = FirebaseStorage.getInstance().getReference().child("users").child(userId)
+                    storageRef.downloadUrl.addOnSuccessListener { uri ->
+                        Glide.with(this@ProfileActivity)
+                            .load(uri)
+                            .into(profileImageView)
+                    }.addOnFailureListener {
+                    }
                 }
 
 
@@ -72,6 +92,53 @@ class ProfileActivity: AppCompatActivity() {
                     // Handle errors
                 }
             })
+        }
+
+        profileImageView.setOnClickListener {
+            val popupMenu = PopupMenu(this, profileImageView)
+
+            // Charger le menu contextuel à partir du fichier XML
+            popupMenu.inflate(R.menu.menu_photo)
+            popupMenu.gravity =  Gravity.BOTTOM
+
+            // Ajouter un écouteur de clic pour chaque élément de menu
+            popupMenu.setOnMenuItemClickListener { menuItem ->
+
+                when (menuItem.itemId) {
+                    R.id.camera -> {
+                        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
+                        true
+                    }
+                    R.id.profileImageView -> {
+                        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                        intent.type = "image/*"
+                        startActivityForResult(intent, REQUEST_IMAGE_PICK)
+                        true
+                    }
+                    R.id.supprimer ->{
+                        val currentUser = FirebaseAuth.getInstance().currentUser
+                        if (currentUser != null) {
+                            val userId = currentUser.uid
+                            val storageRef = FirebaseStorage.getInstance().reference.child("users").child(userId)
+                            storageRef.delete().addOnSuccessListener {
+                                // Photo deleted successfully
+                                profileImageView.setImageResource(R.drawable.profile)
+                            }.addOnFailureListener {
+                                // Error while deleting photo
+                            }
+                        }
+                        true
+
+                    }
+                    else -> {
+                        false
+                    }
+                }
+            }
+
+            // Afficher le menu contextuel
+            popupMenu.show()
         }
 
         shareButton.setOnClickListener {
@@ -106,7 +173,54 @@ class ProfileActivity: AppCompatActivity() {
         adapter = MyAdapter(options)
         (recview as? RecyclerView)?.setAdapter(adapter)
 
-    }override fun onCreateOptionsMenu(menu: Menu): Boolean {
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+            // Afficher l'image capturée dans imageView
+            val imageBitmap = data?.extras?.get("data") as Bitmap
+            profileImageView.setImageBitmap(imageBitmap)
+                val currentUser = FirebaseAuth.getInstance().currentUser
+            if (currentUser != null) {
+                val userId = currentUser.uid
+                val storageRef =
+                    FirebaseStorage.getInstance().reference.child("users").child(userId)
+                val baos = ByteArrayOutputStream()
+                imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+                val data = baos.toByteArray()
+                storageRef.putBytes(data).addOnSuccessListener {
+                    // Image upload successful, handle the result as necessary
+                }.addOnFailureListener {
+                    // Image upload failed, handle the error as necessary
+                }
+            }
+
+        } else if (requestCode == REQUEST_IMAGE_PICK && resultCode == Activity.RESULT_OK) {
+            // Afficher l'image sélectionnée dans imageView
+            val selectedImage = data?.data
+            selectedImage?.let {
+                val imageBitmap = MediaStore.Images.Media.getBitmap(contentResolver, it)
+                profileImageView.setImageBitmap(imageBitmap)
+                val currentUser = FirebaseAuth.getInstance().currentUser
+                if (currentUser != null) {
+                    val userId = currentUser.uid
+                    val storageRef = FirebaseStorage.getInstance().reference.child("users").child(userId)
+                    val baos = ByteArrayOutputStream()
+                    imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+                    val data = baos.toByteArray()
+                    storageRef.putBytes(data).addOnSuccessListener {
+                        // Image upload successful, handle the result as necessary
+                    }.addOnFailureListener {
+                        // Image upload failed, handle the error as necessary
+                    }
+                }
+
+            }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.searchmenu, menu)
         val searchItem: MenuItem = menu.findItem(R.id.search)
         val searchView: SearchView = searchItem.actionView as SearchView
