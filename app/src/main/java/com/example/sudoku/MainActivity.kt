@@ -27,14 +27,24 @@ class MainActivity : AppCompatActivity(),SudokuGridView.OnTouchListener{
 
        // setContentView(R.layout.activity_main)
        binding.Board.registerListener(this)
+       
+       var Mistake = binding.TextViewMistake
 
         viewModel= ViewModelProvider(this).get(SudokuViewModel::class.java)
-        viewModel.sudokuGame.selectedCellLiveData.observe(this, Observer { updateSelectedCell(it) })
+        viewModel.sudokuGame.selectedCellLiveData.observe(this, Observer { 
+            updateSelectedCell(it)
+            Mistake.setText("Mistakes: ${viewModel.sudokuGame.nbMistake}")
+        })
         viewModel.sudokuGame.gridLiveData.observe(this,Observer{updateCell(it)})
+        
+        viewModel.sudokuGame.timer = binding.SimpleChronometer
+        
         val buttons= listOf(binding.OneButton,binding.TwoButton,binding.ThreeButton,binding.FourButton,binding.FiveButton,binding.SixButton,binding.SevenButton,binding.EightButton,binding.NineButton)
 
         buttons.forEachIndexed{index,button->button.setOnClickListener{viewModel.sudokuGame.handleInput(index+1,binding.NoteSwitch.isChecked)}}
         binding.Delete.setOnClickListener{viewModel.sudokuGame.delete(binding.NoteSwitch.isChecked)}
+        
+        viewModel.sudokuGame.startTimer()
     }
 
     private fun updateCell(grid:Grid?)=grid?.let{
