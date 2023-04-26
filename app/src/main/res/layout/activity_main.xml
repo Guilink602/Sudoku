@@ -107,6 +107,19 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="Delete"></Button>
+       
+       <Chronometer
+          android:id="@+id/SimpleChronometer"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"></Chronometer>
+
+      <TextView
+          android:id="@+id/TextViewMistake"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Mistakes: 0">
+      </TextView>
+       
    </GridLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
