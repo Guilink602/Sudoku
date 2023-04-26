@@ -1,5 +1,7 @@
 package com.example.sudoku.game
 
+import android.os.SystemClock
+import android.widget.Chronometer
 import androidx.lifecycle.MutableLiveData
 
 class sudokuGame {
@@ -16,6 +18,7 @@ class sudokuGame {
     var nbMistake=0
 
     //Timer TO SAVE we have to make play
+    var timer: Chronometer? = null
 
     init {
         grid.generateGrid()
@@ -59,5 +62,14 @@ class sudokuGame {
            cell.value=0
         }
         gridLiveData.postValue(grid)
+    }
+    
+        fun startTimer() {
+        timer!!.setBase(SystemClock.elapsedRealtime())
+        timer?.start()
+    }
+
+    fun stopTimer() {
+        timer?.stop()
     }
 }
