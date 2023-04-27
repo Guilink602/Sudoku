@@ -1,10 +1,13 @@
 package com.example.sudoku
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.sudoku.databinding.ActivityMainBinding
+import com.example.sudoku.dialogs.RestartwithNewGameDialog
 import com.example.sudoku.game.Cell
 import com.example.sudoku.game.Grid
 import com.example.sudoku.game.sudokuGame
@@ -12,7 +15,8 @@ import com.example.sudoku.view.SudokuGridView
 import com.example.sudoku.viewModel.SudokuViewModel
 import com.google.firebase.FirebaseApp
 
-class MainActivity : AppCompatActivity(),SudokuGridView.OnTouchListener{
+class MainActivity : AppCompatActivity(),SudokuGridView.OnTouchListener,
+    RestartwithNewGameDialog.NoticeRestartDialogListener {
 
     private lateinit var viewModel:SudokuViewModel
     private lateinit var binding: ActivityMainBinding
@@ -45,7 +49,7 @@ class MainActivity : AppCompatActivity(),SudokuGridView.OnTouchListener{
         buttons.forEachIndexed{index,button->button.setOnClickListener{viewModel.sudokuGame.handleInput(index+1,binding.NoteSwitch.isChecked)
          GameOver()}}
         binding.Delete.setOnClickListener{viewModel.sudokuGame.delete(binding.NoteSwitch.isChecked)}
-        
+        binding.NewGame.setOnClickListener{AskStartNewGame()}
         viewModel.sudokuGame.startTimer()
     }
 
@@ -57,7 +61,6 @@ class MainActivity : AppCompatActivity(),SudokuGridView.OnTouchListener{
 
     private fun updateSelectedCell(cell:Pair<Int,Int>?)=cell?.let{
       binding.Board.updateSelectedCell(cell.first,cell.second)
-
     }
 
   override  fun onCellTouch(row:Int,col:Int){
@@ -70,4 +73,21 @@ class MainActivity : AppCompatActivity(),SudokuGridView.OnTouchListener{
         }
 
     }
-}
+
+
+    fun AskStartNewGame(){
+        var dialog=RestartwithNewGameDialog()
+        dialog.show(supportFragmentManager,"customDialog")
+    }
+
+
+    override fun onDialogRestartGameClick(dialog: DialogFragment) {
+       viewModel.sudokuGame.StartNewGame()
+    }
+
+    override fun onDialogCancelRestartClick(dialog: DialogFragment) {
+        // User touched the dialog's negative button
+
+
+    }
+    }

@@ -10,8 +10,8 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:contentDescription="@string/profile_image_description"
-            android:src="@drawable/profile"/>
-<!--  -->
+            />
+<!-- android:src="@drawable/profile" -->
 
 
         <TextView

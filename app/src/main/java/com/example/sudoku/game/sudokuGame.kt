@@ -78,4 +78,9 @@ class sudokuGame {
     fun stopTimer() {
         timer?.stop()
     }
+
+    fun StartNewGame(){
+        grid.generateGrid()
+        gridLiveData.postValue(grid)
+    }
 }
