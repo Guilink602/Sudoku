@@ -9,8 +9,10 @@
             android:id="@+id/profileImageView"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:src="@drawable/profile"
-            android:contentDescription="@string/profile_image_description"/>
+            android:contentDescription="@string/profile_image_description"
+            android:src="@drawable/profile"/>
+<!--  -->
+
 
         <TextView
             android:id="@+id/nomdutilisateur"

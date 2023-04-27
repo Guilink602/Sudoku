@@ -38,18 +38,18 @@ class SudokuGridView(context:Context, attributeSet:AttributeSet) :View(context,a
 
     private val selectedCellPaint = Paint().apply {
         style = Paint.Style.FILL_AND_STROKE
-        color = Color.parseColor("#11f721")
+        color = Color.parseColor("#d3eaf2")
 
     }
     private val conflictCellPaint = Paint().apply {
         style = Paint.Style.FILL_AND_STROKE
-        color = Color.parseColor("#eb4034")
+        color = Color.parseColor("#e9f5f9")
 
     }
 
     private val StartCellPaint = Paint().apply {
         style = Paint.Style.FILL_AND_STROKE
-        color = Color.GRAY
+        color = Color.parseColor("#69e8ab")
 
     }
 

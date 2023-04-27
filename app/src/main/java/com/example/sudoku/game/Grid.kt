@@ -170,6 +170,12 @@ class Grid(val size:Int) {
         return true
     }
 
-
+    fun gridCompleted():Boolean{
+        cells.forEach{
+            if(!it.isGoodValue())
+                return false
+        }
+        return true
+    }
 
 }

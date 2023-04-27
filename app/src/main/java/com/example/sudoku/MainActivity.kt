@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.sudoku.databinding.ActivityMainBinding
 import com.example.sudoku.game.Cell
 import com.example.sudoku.game.Grid
+import com.example.sudoku.game.sudokuGame
 import com.example.sudoku.view.SudokuGridView
 import com.example.sudoku.viewModel.SudokuViewModel
 import com.google.firebase.FirebaseApp
@@ -41,7 +42,8 @@ class MainActivity : AppCompatActivity(),SudokuGridView.OnTouchListener{
         
         val buttons= listOf(binding.OneButton,binding.TwoButton,binding.ThreeButton,binding.FourButton,binding.FiveButton,binding.SixButton,binding.SevenButton,binding.EightButton,binding.NineButton)
 
-        buttons.forEachIndexed{index,button->button.setOnClickListener{viewModel.sudokuGame.handleInput(index+1,binding.NoteSwitch.isChecked)}}
+        buttons.forEachIndexed{index,button->button.setOnClickListener{viewModel.sudokuGame.handleInput(index+1,binding.NoteSwitch.isChecked)
+         GameOver()}}
         binding.Delete.setOnClickListener{viewModel.sudokuGame.delete(binding.NoteSwitch.isChecked)}
         
         viewModel.sudokuGame.startTimer()
@@ -49,14 +51,23 @@ class MainActivity : AppCompatActivity(),SudokuGridView.OnTouchListener{
 
     private fun updateCell(grid:Grid?)=grid?.let{
         binding.Board.updateCell(grid)
+        //Check if game is over
     }
 
 
     private fun updateSelectedCell(cell:Pair<Int,Int>?)=cell?.let{
       binding.Board.updateSelectedCell(cell.first,cell.second)
+
     }
 
   override  fun onCellTouch(row:Int,col:Int){
         viewModel.sudokuGame.updateCell(row,col)
+    }
+
+    fun GameOver(){
+        if(viewModel.sudokuGame.grid.gridCompleted()){
+           //Implement popup and add data to database
+        }
+
     }
 }

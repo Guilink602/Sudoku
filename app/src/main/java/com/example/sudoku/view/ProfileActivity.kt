@@ -123,7 +123,7 @@ class ProfileActivity: AppCompatActivity() {
                             val storageRef = FirebaseStorage.getInstance().reference.child("users").child(userId)
                             storageRef.delete().addOnSuccessListener {
                                 // Photo deleted successfully
-                                profileImageView.setImageResource(R.drawable.profile)
+                             //   profileImageView.setImageResource(R.drawable.profile)
                             }.addOnFailureListener {
                                 // Error while deleting photo
                             }
