@@ -26,6 +26,7 @@ class sudokuGame {
     }
 
     fun handleInput(number:Int,isTakingNotes:Boolean) {
+        var gameOver:Boolean
         if (selectedRow == -1 || selectedCol == -1) return
         val cell = grid.getCells(selectedRow, selectedCol)
         if (cell.isStartingCell) return
@@ -39,9 +40,14 @@ class sudokuGame {
             cell.value = number
             if(!cell.isGoodValue())
                 nbMistake++;
+            else{
+                //Check if grid completed
+                gameOver=grid.gridCompleted()
+            }
+
         }
         gridLiveData.postValue(grid)
-     //   cellsLiveData.postValue(grid.cells)
+        //cellsLiveData.postValue(grid.cells)
     }
 
     fun updateCell(row:Int,col:Int){
@@ -71,5 +77,10 @@ class sudokuGame {
 
     fun stopTimer() {
         timer?.stop()
+    }
+
+    fun StartNewGame(){
+        grid.generateGrid()
+        gridLiveData.postValue(grid)
     }
 }

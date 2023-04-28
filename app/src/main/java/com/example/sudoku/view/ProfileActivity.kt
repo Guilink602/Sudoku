@@ -55,7 +55,7 @@ class ProfileActivity: AppCompatActivity() {
 
         val shareButton = findViewById<Button>(R.id.partage)
 
-
+        findViewById<Button>(R.id.Retour).setOnClickListener{finish()}
 
         val currentUser = FirebaseAuth.getInstance().currentUser
         if (currentUser == null) {
@@ -123,7 +123,7 @@ class ProfileActivity: AppCompatActivity() {
                             val storageRef = FirebaseStorage.getInstance().reference.child("users").child(userId)
                             storageRef.delete().addOnSuccessListener {
                                 // Photo deleted successfully
-                                profileImageView.setImageResource(R.drawable.profile)
+                             //   profileImageView.setImageResource(R.drawable.profile)
                             }.addOnFailureListener {
                                 // Error while deleting photo
                             }

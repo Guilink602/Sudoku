@@ -107,19 +107,44 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="Delete"></Button>
-       
-       <Chronometer
-          android:id="@+id/SimpleChronometer"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"></Chronometer>
 
-      <TextView
-          android:id="@+id/TextViewMistake"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="Mistakes: 0">
-      </TextView>
+       <Button
+           android:id="@+id/NewGame"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="New Game"></Button>
+       
+
        
    </GridLayout>
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:layout_constraintStart_toEndOf="@id/Pad"
+    app:layout_constraintBottom_toBottomOf="parent"
+    tools:ignore="MissingConstraints">
+
+    <Button
+        android:id="@+id/Retour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Menu"
+        app:layout_constraintStart_toEndOf="@id/Pad"
+        app:layout_constraintBottom_toBottomOf="parent"></Button>
+
+    <Chronometer
+        android:id="@+id/SimpleChronometer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"></Chronometer>
+
+    <TextView
+        android:id="@+id/TextViewMistake"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mistakes: 0">
+    </TextView>
+</LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
