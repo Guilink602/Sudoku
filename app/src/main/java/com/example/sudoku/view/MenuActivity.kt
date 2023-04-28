@@ -18,6 +18,7 @@ class MenuActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
+
         binding.StartGameButton.setOnClickListener{
             val intentStart = Intent(this, MainActivity::class.java)
             startActivity(intentStart)
@@ -29,29 +30,42 @@ class MenuActivity : AppCompatActivity() {
         binding.LeaderboardButton.setOnClickListener {
 
             dbSudoku = Database(this, null)
-            
+
             if (::dbSudoku.isInitialized) {
                 val getData = dbSudoku.getTable()
 
                 val intentLeaderboard = Intent(this, LeaderboardActivity::class.java)
 
-                val nameList = ArrayList<String>()
-                val timeList = ArrayList<String>()
-                val errorsList = ArrayList<String>()
+                if(getData!=null && getData.getCount()>0) {
 
-                while (getData!!.moveToNext()) {
-                    nameList.add(getData.getString(1))
-                    timeList.add(getData.getString(2))
-                    errorsList.add(getData.getString(3))
+
+                    val nameList = ArrayList<String>()
+                    val timeList = ArrayList<String>()
+                    val errorsList = ArrayList<Int>()
+                    val scoreList = ArrayList<Int>()
+
+
+                    while (getData!!.moveToNext()) {
+                        nameList.add(getData.getString(0))
+                        timeList.add(getData.getString(1))
+                        errorsList.add(getData.getInt(2))
+                        scoreList.add(getData.getInt(3))
+                    }
+                    intentLeaderboard.putExtra("notEmpty", true)
+                    intentLeaderboard.putExtra("dataName", nameList)
+                    intentLeaderboard.putExtra("dataTime", timeList)
+                    intentLeaderboard.putExtra("dataErrors", errorsList)
+                    intentLeaderboard.putExtra("dataScore", scoreList)
+
+                    startActivity(intentLeaderboard)
                 }
-                intentLeaderboard.putExtra("dataName", nameList)
-                intentLeaderboard.putExtra("dataTime", timeList)
-                intentLeaderboard.putExtra("dataErrors", errorsList)
-
-                startActivity(intentLeaderboard)
+                else {
+                    intentLeaderboard.putExtra("notEmpty", false)
+                    startActivity(intentLeaderboard)
+                }
             }
             else {
-                Toast.makeText(this, "The leaderboard is currently empty", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Error! Cannot access leaderboard", Toast.LENGTH_LONG).show()
             }
         }
 
