@@ -42,7 +42,8 @@ class SignupActivity  : AppCompatActivity() {
                     firebaseAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener {
                         if (it.isSuccessful) {
                             database=FirebaseDatabase.getInstance().getReference("Users").child(firebaseAuth.currentUser!!.uid)
-                            val user= User(nom,prenom,0,nomdutilisateur, firebaseAuth.currentUser!!.uid)
+                            var user:User
+                            user= User(nom,prenom,"00",0,0,nomdutilisateur, firebaseAuth.currentUser!!.uid)
                             database.setValue(user).addOnSuccessListener {
                                 binding.nom.text.clear()
                                 binding.prenom.text.clear()
