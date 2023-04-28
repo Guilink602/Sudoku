@@ -6,48 +6,62 @@ import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.sudoku.R
 import com.example.sudoku.databinding.ActivityLeaderboardBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+
 
 class LeaderboardActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLeaderboardBinding
+    private lateinit var database : DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLeaderboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val getIntent = intent
+        database = Firebase.database.reference
+
         val listLeaderboard = findViewById<ListView>(R.id.ListViewLeaderboard)
 
-        val getName = intent.getStringArrayListExtra("dataName")
-        val getTime = intent.getStringArrayListExtra("dataTime")
-        val getErrors = intent.getStringArrayListExtra("dataErrors")
-        val getAllData = ArrayList<String>()
-        var index = 0
+        val isNotEmpty = intent.getBooleanExtra("notEmpty", false)
 
-        while ((index < getName!!.size) and (index < getTime!!.size) and (index < getErrors!!.size)) {
-            getAllData.add("${index+1} " + getName[index] + " " + getTime[index] + " " + getErrors[index])
-            index++
+        val arrayAdapterLocal = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1)
+
+        if(isNotEmpty) {
+
+            val getName = intent.getStringArrayListExtra("dataName")
+            val getTime = intent.getStringArrayListExtra("dataTime")
+            val getErrors = intent.getIntegerArrayListExtra("dataErrors")
+            val getScore = intent.getIntegerArrayListExtra("dataScore")
+
+            val getAllData = ArrayList<String>()
+            var index = 0
+
+            while ((index < getName!!.size) and (index < getTime!!.size) and (index < getErrors!!.size)) {
+                getAllData.add("${index + 1} " + getName[index] + " Time: " + getTime[index] + " Errors: " + getErrors[index] + " Total Score: " + (getScore?.get(index)))
+                index++
+            }
+
+            arrayAdapterLocal.addAll(getAllData)
+
         }
+        listLeaderboard.adapter = arrayAdapterLocal
 
-        val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, getAllData)
-        listLeaderboard.adapter = arrayAdapter
-        
         val getOnlineData = ArrayList<String>()
-        /*
-        val userRef = FirebaseDatabase.getInstance().getReference("Users").orderByKey()
+
+        val userRef = FirebaseDatabase.getInstance().getReference("Users")
         userRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-
+                var x = 0
                 for (postSnapshot in dataSnapshot.children) {
-
-                    var x = 1
-
-                    val Username = dataSnapshot.child("nomdutilisateur").getValue(String::class.java)
-                    val Nom = dataSnapshot.child("nom").getValue(String::class.java)
-                    val Prenom = dataSnapshot.child("prenom").getValue(String::class.java)
-                    val Score = dataSnapshot.child("score").getValue(Int::class.java)
-                    getOnlineData.add("$x " + "$Username " + "$Score")
                     x++
+                    val Username = postSnapshot.child("nomdutilisateur").getValue(String::class.java)
+                    val Time = postSnapshot.child("temps").getValue(String::class.java)
+                    val Errors = postSnapshot.child("erreurs").getValue(String::class.java)
+                    val Score = postSnapshot.child("score").getValue(Int::class.java)
+                    getOnlineData.add("$x Nom: $Username Time: $Time Errors: $Errors Total Score: $Score")
                 }
             }
 
@@ -57,14 +71,14 @@ class LeaderboardActivity : AppCompatActivity() {
         })
         val arrayAdapterOnline = ArrayAdapter(this, android.R.layout.simple_list_item_1, getOnlineData)
 
-         */
-        
+
+
         binding.BackButton.setOnClickListener {
             super.finish()
         }
 
         binding.OnlineButton.setOnClickListener{
-            
+
             if(binding.OnlineButton.text == "Online Leaderboard") {
 
 
@@ -74,10 +88,13 @@ class LeaderboardActivity : AppCompatActivity() {
                 binding.TextViewLeaderboard.text = "Online Leaderboard"
             }
             else {
+
                 listLeaderboard.adapter = arrayAdapterLocal
+
                 binding.OnlineButton.text = "Online Leaderboard"
                 binding.TextViewLeaderboard.text = "Personnal Leaderboard"
             }
+
         }
 
     }
