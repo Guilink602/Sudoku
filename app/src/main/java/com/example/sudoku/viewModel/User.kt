@@ -11,5 +11,5 @@ data class User(
     val uid: String = "",
     var imageUrl:String=""
 ) {
-    constructor() : this("", "", null, "", "")
+    constructor() : this("", "", null, null, null,"", "")
 }
