@@ -28,6 +28,8 @@ class MenuActivity : AppCompatActivity() {
         }
         binding.LeaderboardButton.setOnClickListener {
 
+            dbSudoku = Database(this, null)
+            
             if (::dbSudoku.isInitialized) {
                 val getData = dbSudoku.getTable()
 
