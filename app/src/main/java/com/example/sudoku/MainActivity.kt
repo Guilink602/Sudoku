@@ -7,6 +7,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.sudoku.databinding.ActivityMainBinding
+import com.example.sudoku.dialogs.EndGameDialog
 import com.example.sudoku.dialogs.RestartwithNewGameDialog
 import com.example.sudoku.game.Cell
 import com.example.sudoku.game.Grid
@@ -16,7 +17,8 @@ import com.example.sudoku.viewModel.SudokuViewModel
 import com.google.firebase.FirebaseApp
 
 class MainActivity : AppCompatActivity(),SudokuGridView.OnTouchListener,
-    RestartwithNewGameDialog.NoticeRestartDialogListener {
+    RestartwithNewGameDialog.NoticeRestartDialogListener,
+    EndGameDialog.NoticeEndGameDialogListener {
 
     private lateinit var viewModel:SudokuViewModel
     private lateinit var binding: ActivityMainBinding
@@ -70,8 +72,9 @@ class MainActivity : AppCompatActivity(),SudokuGridView.OnTouchListener,
     fun GameOver(){
         if(viewModel.sudokuGame.grid.gridCompleted()){
            //Implement popup and add data to database
+            var dialog=EndGameDialog()
+            dialog.show(supportFragmentManager,"customDialog")
         }
-
     }
 
 
@@ -87,7 +90,14 @@ class MainActivity : AppCompatActivity(),SudokuGridView.OnTouchListener,
 
     override fun onDialogCancelRestartClick(dialog: DialogFragment) {
         // User touched the dialog's negative button
-
-
     }
+
+    override fun onDialogEndGameClick(dialog: DialogFragment) {
+        viewModel.sudokuGame.StartNewGame()
+    }
+
+    override fun onShareClick(dialog: DialogFragment) {
+        //What require to share
+    }
+
     }

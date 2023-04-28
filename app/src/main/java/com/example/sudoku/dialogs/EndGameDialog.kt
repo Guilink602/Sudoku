@@ -5,25 +5,23 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.example.sudoku.R
-import com.example.sudoku.view.SudokuGridView
+import com.example.sudoku.databinding.EndGameDialogBinding
 
-class RestartwithNewGameDialog :DialogFragment(){
+class EndGameDialog:DialogFragment() {
+    private var EndGameListener: NoticeEndGameDialogListener? = null
+    lateinit var endGameDialogBinding:EndGameDialogBinding
 
-    private var restartGameListener: NoticeRestartDialogListener? = null
-
-    interface NoticeRestartDialogListener {
-        fun onDialogRestartGameClick(dialog: DialogFragment)
-        fun onDialogCancelRestartClick(dialog: DialogFragment)
+    interface NoticeEndGameDialogListener {
+        fun onDialogEndGameClick(dialog: DialogFragment)
+        fun onShareClick(dialog:DialogFragment)
     }
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
+
             // Build the dialog and set up the button click handlers
             val builder = AlertDialog.Builder(it)
             // Get the layout inflater
@@ -31,38 +29,31 @@ class RestartwithNewGameDialog :DialogFragment(){
 
             // Inflate and set the layout for the dialog
             // Pass null as the parent view because its going in the dialog layout
-            builder.setView(inflater.inflate(R.layout.restart_with_new_game_dialog, null))
+            endGameDialogBinding=EndGameDialogBinding.inflate(this.layoutInflater)
+            builder.setView(inflater.inflate(R.layout.end_game_dialog, null))
                 // Add action buttons
                 .setPositiveButton("Restart",
                     DialogInterface.OnClickListener { dialog, id ->
-                        restartGameListener?.onDialogRestartGameClick(this)
+                        EndGameListener?.onDialogEndGameClick(this)
                         // sign in the user ...
                     })
-                .setNegativeButton("Cancel",
-                    DialogInterface.OnClickListener { dialog, id ->
-                        restartGameListener?.onDialogCancelRestartClick(this)
-                    })
-
-
+            endGameDialogBinding.ShareBtn.setOnClickListener{EndGameListener?.onShareClick(this)}
             builder.create()
 
         } ?: throw IllegalStateException("Activity cannot be null")
-
     }
 
     // Override the Fragment.onAttach() method to instantiate the NoticeDialogListener
-    override fun onAttach(context:Context) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         // Verify that the host activity implements the callback interface
         try {
             // Instantiate the NoticeDialogListener so we can send events to the host
-            restartGameListener = context as NoticeRestartDialogListener
+            EndGameListener = context as NoticeEndGameDialogListener
         } catch (e: ClassCastException) {
             // The activity doesn't implement the interface, throw exception
-            throw ClassCastException(
-                (context.toString() +
-                        " must implement NoticeDialogListener")
-            )
+            throw ClassCastException((context.toString() +
+                    " must implement NoticeDialogListener"))
         }
     }
 

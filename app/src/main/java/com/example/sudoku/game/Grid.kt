@@ -12,7 +12,7 @@ class Grid(val size:Int) {
     fun generateGrid(){
          cells=List(9*9){i->Cell(i/9,i%9,  0, false,mutableSetOf<Int>())}
         generateCompleteSoluce()
-        removeCell()
+        RemoveCell()
     }
 
     fun getCells(row:Int,col:Int)= cells[row*9+col]
@@ -86,10 +86,11 @@ class Grid(val size:Int) {
         return nbCellNotEmpty
     }
 
-    fun removeCell(){
+   
+    fun RemoveCell(){
         var nbFilledCell=countNotEmptyCell()
         var rounds=3
-        while(rounds>0&&nbFilledCell>=17){
+        while(rounds>0&&nbFilledCell>=80){
             //getRandomCell
 
             var cellToEmpty:Cell?=null
