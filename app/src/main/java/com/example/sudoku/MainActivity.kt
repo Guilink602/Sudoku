@@ -52,6 +52,7 @@ class MainActivity : AppCompatActivity(),SudokuGridView.OnTouchListener,
          GameOver()}}
         binding.Delete.setOnClickListener{viewModel.sudokuGame.delete(binding.NoteSwitch.isChecked)}
         binding.NewGame.setOnClickListener{AskStartNewGame()}
+        binding.Retour.setOnClickListener{BackToMenu()}
         viewModel.sudokuGame.startTimer()
     }
 
@@ -98,6 +99,10 @@ class MainActivity : AppCompatActivity(),SudokuGridView.OnTouchListener,
 
     override fun onShareClick(dialog: DialogFragment) {
         //What require to share
+    }
+
+    fun BackToMenu(){
+        finish()
     }
 
     }

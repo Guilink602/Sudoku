@@ -38,7 +38,7 @@ class UserProfileActivity : AppCompatActivity() {
         nomdutilisateur = binding.nomdutilisateur
         score = binding.score
         recyclerView = findViewById(R.id.recview)
-
+        binding.Retour.setOnClickListener{finish()}
         // Set up RecyclerView with adapter
         val layoutManager = LinearLayoutManager(this)
         val options = FirebaseRecyclerOptions.Builder<User>()

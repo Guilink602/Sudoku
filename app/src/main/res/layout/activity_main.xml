@@ -124,6 +124,15 @@
     app:layout_constraintStart_toEndOf="@id/Pad"
     app:layout_constraintBottom_toBottomOf="parent"
     tools:ignore="MissingConstraints">
+
+    <Button
+        android:id="@+id/Retour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Menu"
+        app:layout_constraintStart_toEndOf="@id/Pad"
+        app:layout_constraintBottom_toBottomOf="parent"></Button>
+
     <Chronometer
         android:id="@+id/SimpleChronometer"
         android:layout_width="wrap_content"

@@ -55,7 +55,7 @@ class ProfileActivity: AppCompatActivity() {
 
         val shareButton = findViewById<Button>(R.id.partage)
 
-
+        findViewById<Button>(R.id.Retour).setOnClickListener{finish()}
 
         val currentUser = FirebaseAuth.getInstance().currentUser
         if (currentUser == null) {
