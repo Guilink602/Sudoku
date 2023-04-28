@@ -31,8 +31,11 @@ class MenuActivity : AppCompatActivity() {
 
             dbSudoku = Database(this, null)
 
+          //  dbSudoku.deleteFromTable()
             if (::dbSudoku.isInitialized) {
                 val getData = dbSudoku.getTable()
+
+
 
                 val intentLeaderboard = Intent(this, LeaderboardActivity::class.java)
 

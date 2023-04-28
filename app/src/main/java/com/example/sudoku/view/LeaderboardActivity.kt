@@ -59,7 +59,7 @@ class LeaderboardActivity : AppCompatActivity() {
                     x++
                     val Username = postSnapshot.child("nomdutilisateur").getValue(String::class.java)
                     val Time = postSnapshot.child("temps").getValue(String::class.java)
-                    val Errors = postSnapshot.child("erreurs").getValue(String::class.java)
+                    val Errors = postSnapshot.child("erreurs").getValue(Long::class.java)
                     val Score = postSnapshot.child("score").getValue(Int::class.java)
                     getOnlineData.add("$x Nom: $Username Time: $Time Errors: $Errors Total Score: $Score")
                 }

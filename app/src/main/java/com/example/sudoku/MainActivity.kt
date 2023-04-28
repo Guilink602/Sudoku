@@ -21,6 +21,8 @@ import com.example.sudoku.viewModel.SudokuViewModel
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 
 class MainActivity : AppCompatActivity(),SudokuGridView.OnTouchListener,
@@ -40,7 +42,7 @@ class MainActivity : AppCompatActivity(),SudokuGridView.OnTouchListener,
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        dbFirebase= Firebase.database.reference
         // setContentView(R.layout.activity_main)
         binding.Board.registerListener(this)
 
@@ -82,7 +84,22 @@ class MainActivity : AppCompatActivity(),SudokuGridView.OnTouchListener,
     private fun saveResultToLocalDatabase(time: String, errors: Int, score: Int) {
         dbSudoku = Database(this, null)
         val currentUser = FirebaseAuth.getInstance().currentUser
-        dbSudoku.addData(currentUser!!.uid, time, errors, score)
+
+        val userRef = FirebaseDatabase.getInstance().getReference("Users").child(currentUser!!.uid)
+        userRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+
+                var username = dataSnapshot.child("nomdutilisateur").getValue(String::class.java)
+
+                if (username != null) {
+                    dbSudoku.addData(username, time, errors, score)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+        })
     }
 
     private fun saveResultToFirebaseDatabase(time: String, errors: Int, score: Int) {
@@ -95,15 +112,15 @@ class MainActivity : AppCompatActivity(),SudokuGridView.OnTouchListener,
 
                 if (ancienScore != null) {
                     if(ancienScore < score) {
-                        dbFirebase.child("Users").child("score").setValue(score)
-                        dbFirebase.child("Users").child("temps").setValue(time)
-                        dbFirebase.child("Users").child("erreurs").setValue(errors)
+                        dbFirebase.child("Users").child(currentUser!!.uid).child("score").setValue(score)
+                        dbFirebase.child("Users").child(currentUser!!.uid).child("temps").setValue(time)
+                        dbFirebase.child("Users").child(currentUser!!.uid).child("erreurs").setValue(errors)
                     }
                 }
                 else {
-                    dbFirebase.child("Users").child("score").setValue(score)
-                    dbFirebase.child("Users").child("temps").setValue(time)
-                    dbFirebase.child("Users").child("erreurs").setValue(errors)
+                    dbFirebase.child("Users").child(currentUser!!.uid).child("score").setValue(score)
+                    dbFirebase.child("Users").child(currentUser!!.uid).child("temps").setValue(time)
+                    dbFirebase.child("Users").child(currentUser!!.uid).child("erreurs").setValue(errors)
                 }
             }
 

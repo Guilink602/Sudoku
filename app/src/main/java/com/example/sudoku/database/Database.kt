@@ -49,9 +49,9 @@ class Database(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         return true
     }*/
 
-    fun deleteFromTable(name : String) {
+    fun deleteFromTable() {
         val db = this.writableDatabase
-        db.delete(TABLE_NAME, "NAME = ?", arrayOf(name))
+        db.execSQL("DELETE FROM " + TABLE_NAME)
     }
 
     companion object{

@@ -90,7 +90,7 @@ class Grid(val size:Int) {
     fun RemoveCell(){
         var nbFilledCell=countNotEmptyCell()
         var rounds=3
-        while(rounds>0&&nbFilledCell>=80){
+        while(rounds>0&&nbFilledCell>=30){
             //getRandomCell
 
             var cellToEmpty:Cell?=null
@@ -104,7 +104,7 @@ class Grid(val size:Int) {
             cellToEmpty?.setNotStartingCell(0,false)
             nbFilledCell--
             var lstCopyGrid=Array(9*9){i->cells[i].value}
-          var nbSoluce= solveGrid(lstCopyGrid)
+            var nbSoluce= solveGrid(lstCopyGrid)
 
             if(nbSoluce!=1){
                 cellToEmpty?.setCellDefaultInfo(cellToEmpty.getCorrectValue())

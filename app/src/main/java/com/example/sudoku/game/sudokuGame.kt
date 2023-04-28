@@ -80,7 +80,9 @@ class sudokuGame {
     }
 
     fun StartNewGame(){
+        nbMistake=0;
         grid.generateGrid()
         gridLiveData.postValue(grid)
+        startTimer()
     }
 }
